@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  robot-server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "8443:8443"
+    container_name: robot-vulnerable-server
+    tty: true
+    stdin_open: true
+
+  robot-attacker:
+    build:
+      context: ./attacker
+      dockerfile: Dockerfile
+    container_name: robot-attacker-engine
+    depends_on:
+      - robot-server
+    # Mount the local captures folder to the container
+    volumes:
+      - ./attacker/captures:/app/captures
+    tty: true
+    stdin_open: true
+
+  robot-victim:
+    build:
+      context: ./victim
+      dockerfile: Dockerfile
+    container_name: robot-victim-app
+    environment:
+      - SERVER_URL=https://robot-server:8443
+    depends_on:
+      - robot-server
+      - robot-attacker
+    command: ["sh", "-c", "sleep 10 && ./victim-app"]
+    tty: true
+    stdin_open: true
