@@ -17,7 +17,7 @@ func main() {
 	sessionLogger := middleware.NewSessionLogger("captures")
 
 	// Monitor network for traffic
-	networkSniffer := middleware.NewSniffer(5 * time.Second)
+	networkSniffer := middleware.NewSniffer(30 * time.Second)
 	networkSniffer.Start()
 	fmt.Println("[ATTACK] Sniffer active. Waiting for silence...")
 

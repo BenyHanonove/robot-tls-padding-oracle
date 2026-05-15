@@ -4,4 +4,4 @@ COPY . .
 RUN go mod tidy
 RUN go build -o robot-attacker main.go
 ENV GODEBUG=rsa1024min=0,tlsrsakex=1
-CMD ["sh", "-c", "sleep 5 && ./robot-attacker"]
+CMD ["sh", "-c", "sleep 30 && ./robot-attacker"]
